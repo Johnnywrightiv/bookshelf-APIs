@@ -18,8 +18,26 @@
           <hr/>
           </div>
 
+          <div class="form-group" id="shelf-area">
+            <h3>Your Collections:</h3>
+            <select class="form-control m-2" id="shelf-selection">
+                <option value="please-select">-- select one --</option>
+            </select> 
+          </div>
+
+          <div class="form-group new-collection">
+            <div class="input-group m-2">
+              <input type="text" id="new-shelf" class="form-control" placeholder="new collection">
+              <button class="btn btn-primary" id="add-new-shelf">Add New Collection to Shelf</button>
+            </div>
+            <hr>
+          </div>
+
+          <div class="book-shelf row">
+          </div>
+
           <form class="search-form">
-          <h3>Search Books</h3>
+          <h3>Search Books:</h3>
 
           <div class="form-group">
             <input type="text" id="search-query" class="form-control">
@@ -33,17 +51,22 @@
 
           <div class="books row">
           </div>
+          <hr>
+          <button class="btn btn-danger offset-5" id="load-more">Load More
+          </button>
       </div>
       </div>
     </div> 
 
     <script id="book-template" type="text/x-handlebars-template">
-      <div class="book col-md-6">
+      <div class="book col-md-6 mb-3">
         <h4>{{ title }}</h4>
         <div>Author: <strong>{{ author }}</strong></div>
         <div>Pages: <strong>{{ pageCount }}</strong></div>
         <div>ISBN: <strong>{{ isbn }}</strong></div>
         <img src="{{imageURL}}" alt="">
+        <br>
+        <button class="btn btn-warning m-1 add-to-shelf">Add to Shelf</button>
       </div>
     </script>
 
