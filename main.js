@@ -72,8 +72,6 @@ var addBooks = function (data) {
 
   console.log('API Data:', data);
 
-  books = [];
-
   for (let i = 0; i < data.items.length; i++) {
     var bookData = data.items[i];
 
@@ -94,20 +92,19 @@ var addBooks = function (data) {
 
   // Clicking add to shelf button should push book object to an array on the bookshelf
   $('.add-to-shelf').on('click', $('.book'), function() {
-    alert('this event should also push the selected book object to the bookShelf array, and prompt the user which shelfCollection prop to add to the object')
-    debugger;
-    bookShelf.push($('this'))
+    if (!bookShelf.includes(this)) {
+      bookShelf.push(this)
+    };
     $('.book-shelf').append(this.parentElement)
     this.innerHTML = 'Remove from Shelf';
     this.classList.add('remove-from-shelf')
     this.classList.remove('add-to-shelf')
-    console.log('twice?')
-  });
-  
-  // Remove from shelf button not working :(
-  $('.remove-from-shelf').on('click', $('.book'), function() {
-    console.log('-- accessed correct scope --')
-    this.parentElement.remove();
+
+    // Remove from shelf 
+    $('.remove-from-shelf').on('click', $('.book'), function() {
+      console.log('-- accessed correct scope --')
+      this.parentElement.remove();
+    });
   });
 };
 
@@ -116,6 +113,29 @@ var fetch = function (query) {
   $.ajax({
     method: "GET",
     url: "https://www.googleapis.com/books/v1/volumes?q=" + query,
+    dataType: "json",
+    // startIndex: 1,
+    success: function(data) {
+      addBooks(data);
+      $('html').removeClass('wait')
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus);
+    }
+  });
+};
+
+$('#load-more').on('click', function() {
+  $('html').addClass('wait')
+  var searchTerm = $('#search-query').val();
+  loadMore(searchTerm);
+});
+
+var loadMore = function (query) {
+  console.log("https://www.googleapis.com/books/v1/volumes?q=" + query + "&startIndex=" + books.length)
+  $.ajax({
+    method: "GET",
+    url: "https://www.googleapis.com/books/v1/volumes?q=" + query + "&startIndex=" + books.length,
     dataType: "json",
     // startIndex: 1,
     success: function(data) {
